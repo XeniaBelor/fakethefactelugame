@@ -10,7 +10,6 @@
     <title>Registration form<</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css">
-    <script src="main.js"></script>
 </head>
 <body>
 <form method="POST">  
@@ -24,11 +23,32 @@
 
     <br>
     <label for="singupPassword">Password:</label>
-    <input class="holder" name="singupPassword" type="password">
+    <input class="holder" name="singupPassword" type="password" id="password1">
     <?php echo $singupPasswordError; ?>
+    <br>
+    <label> Repeat Password:</label>
+    <input class="holder" name="singupPassword2" type="password" id="password2">
+    <p id="validate-status"></p>
 
     <br>
     <input name="pagebutton" type="submit" value="Create">
 </form> 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+$("#password2").keyup(validate);
+});
+
+function validate() {
+var password1 = $("#password1").val();
+var password2 = $("#password2").val();
+  if(password1 == password2) {
+     $("#validate-status").text("Passwords match!");        
+  }
+  else {
+      $("#validate-status").text("Password do not match!");  
+  }
+}  </script>
 </body>
 </html>

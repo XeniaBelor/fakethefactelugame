@@ -6,7 +6,7 @@ if ($mysqli->connect_errno) {
 }
 echo $mysqli->host_info . "\n";
     
-$signupName = $singupPassword = $signupNameError = $singupPasswordError = "";
+$signupName = $singupPassword = $signupNameError = $singupPasswordError = $singupPassword2 = "";
 
 //REGISTRATION
 //USERNAME
@@ -31,7 +31,9 @@ if(isset ($_POST["singupPassword"])) {
 	$singupPasswordError = "This field is required!";
 	} else {
 	if (strlen ($_POST["singupPassword"]) <6)
-	$singupPasswordError = "Password must be at least 6 characters!";
-	}
-}
+    $singupPasswordError = "Password must be at least 6 characters!";
+    }
+    if ($_POST["singupPassword"]!= $_POST["singupPassword2"])
+    $singupPasswordError = "Passwords DO NOT MATCH!!!";
+    }
 ?>
