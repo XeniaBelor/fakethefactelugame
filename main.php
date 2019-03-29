@@ -21,7 +21,7 @@
     
     <label for="signupName">Username:</label>
     <!--value=signupName will allow text not to dissaper when error appears -->
-    <input class="holder" name="signupName" type="text" value="<?=$signupName;?>">
+    <input class="holder" name="signupName" type="text" value="<?=$signupName;?>" required>
     <!--If smth is wron appears error-->
     <?php echo $signupNameError; ?>
 
