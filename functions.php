@@ -48,7 +48,6 @@ if (isset ($_POST["signupName"])) {
 
 }
     
-
 //PASSWORD
 if(isset ($_POST["singupPassword"])) {
 	if (empty ($_POST["singupPassword"])) {
@@ -79,5 +78,4 @@ if (isset($_POST["signupName"])&&
     $singupPassword = hash("sha512", $_POST["singupPassword"]);
     registration($signupName, $singupPassword);
     }
-
 ?>
