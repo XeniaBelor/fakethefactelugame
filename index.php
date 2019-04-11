@@ -5,6 +5,28 @@ require("functions.php");
 if (isset($_SESSION["userId"])){
     header('Location: public/homepage.php');}
 
+	//LOOGIMINE SISSE
+	//KASUTAJA
+	if (isset ($_POST["logemail"])) {
+		if (empty ($_POST["logemail"])) {
+			$logemailError = "* Väli on kohustuslik!";
+		}else {
+		$logemail = $_POST["logemail"];
+		}
+	}
+	
+	//PAROOL
+	if (isset ($_POST["loginPassword"])) {
+		if (empty ($_POST["loginPassword"])) {
+			$loginPasswordError = "* Väli on kohustuslik!";
+		} 
+    }
+    
+    {
+	$error = login($_POST["logemail"], $_POST["loginPassword"]);
+	}
+	
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,9 +48,9 @@ if (isset($_SESSION["userId"])){
     <form method="POST">  
     <h1>Registration</h1>
     
-    <label for="email">email:</label>
-    <input class="holder" name="email" type="email" value="<?=$email;?>" required>
-    <?php echo $emailerror; ?>
+    <label for="regemail">email:</label>
+    <input class="holder" name="regemail" type="email" value="<?=$regemail;?>" required>
+    <?php echo $regemailerror; ?>
 
     <br>
     <label for="signupName">Username:</label>
@@ -69,16 +91,19 @@ if (isset($_SESSION["userId"])){
 
 <!--Log in-->
 <form method="POST">
+
     <h1>Log In</h1>
-    <label for="loginName"></label>
-    <input class="holder" name="loginName" type="text" value="<?=$loginName;?>" required>
-    <?php echo $loginNameError; ?>
+    <?php echo $error; ?>
+    <label for="logemail"></label>
+    <input class="holder" name="logemail" type="text" value="<?=$logemail;?>" required>
+    <?php echo $logemailError; ?>
     <br>
     <label for="loginPassword">Password:</label>
     <input class="holder" name="loginPassword" type="password">
     <?php echo $loginPasswordError; ?>
 
     <input name="login" type="submit" value="Log in">
+
 </form>
 
 

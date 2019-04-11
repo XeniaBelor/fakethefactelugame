@@ -7,16 +7,16 @@ if ($mysqli->connect_errno) {
 echo $mysqli->host_info . "\n";
 
 $signupName = $signupPassword = $signupNameError = $signupPasswordError = $signupPassword2 = "";
-$email = $signupAge = $signupGender = $loginName = $loginPassword =  $error = "";
+$regemail = $signupAge = $signupGender = $parool = $email = "";
 
 //REGISTRATION
-function registration($email, $signupName, $signupPassword, $signupAge, $signupGender) {
+function registration($regemail, $signupName, $signupPassword, $signupAge, $signupGender) {
 			
     $mysqli= new mysqli("localhost","u251068829_munem","LaRudyzyne","u251068829_reded");
     
     $stmt = $mysqli->prepare("INSERT INTO registration(email, signupName, signupPassword, signupAge, signupGender) VALUE (?, ?, ?, ?, ?)");
     echo $mysqli->error;
-    $stmt->bind_param("sssss",$email, $signupName, $signupPassword, $signupAge, $signupGender);
+    $stmt->bind_param("sssss",$regemail, $signupName, $signupPassword, $signupAge, $signupGender);
     
     if ( $stmt->execute() ) {
         echo "Registered!";
@@ -25,16 +25,14 @@ function registration($email, $signupName, $signupPassword, $signupAge, $signupG
     }	
 }
 //USERNAME
-if (isset ($_POST["email"])) {
-    $db= mysqli_connect("localhost","u251068829_munem","LaRudyzyne","u251068829_reded");
-    $email = $_POST['email'];
-    $sql_u = "SELECT * FROM registration WHERE email = '$email'";
-    $res_u = mysqli_query($db,$sql_u) or die (mysqli_error($db));
-    if (mysqli_num_rows($res_u) > 0) {
-        $emailError = "Username already exists";
-    }   else {
-        $email = $_POST["email"];
+if (isset ($_POST["regemail"])) {
+    if (empty ($_POST["regemail"])) {
+        $regemailError = "* Väli on kohustuslik!";
+    } else {
+        $regemail = $_POST["regemail"];
     }
+    if (strlen ($_POST["regemail"]) >15)
+    $regemail = "* Nimi ei tohi olla rohkem kui 15 tähemärki pikk!";
 }
 
 if (isset ($_POST["signupName"])) {
@@ -69,12 +67,12 @@ if(isset ($_POST["signupPassword"])) {
     }
 
     //REGISTRATION END
-    if (isset($_POST["email"]) &&
+    if (isset($_POST["regemail"]) &&
         isset($_POST["signupName"]) &&
         isset($_POST["signupPassword"]) &&
         isset($_POST["signupAge"]) &&
         isset($_POST["signupGender"]) &&
-        !empty($_POST["email"]) &&
+        !empty($_POST["regemail"]) &&
         !empty($_POST["signupName"]) &&
         !empty($_POST["signupPassword"]) &&
         !empty($_POST["signupAge"]) &&
@@ -84,14 +82,43 @@ if(isset ($_POST["signupPassword"])) {
     //SAVING FUNCTION
     {
     echo "Saved...<br>";
-    echo "Your email ".$email."<br>";
+    echo "Your email ".$regemail."<br>";
 	echo "Your username ".$signupName."<br>";
     echo "Paswword ".$_POST["signupPassword"]."<br>";
     echo "Age ".$signupAge."<br>";
     echo "Gender ".$signupGender."<br>";
          
     $signupPassword = hash("sha512", $_POST["signupPassword"]);
-    registration($email, $signupName, $signupPassword, $_POST["signupAge"], $_POST["signupGender"]);
+    registration($regemail, $signupName, $signupPassword, $_POST["signupAge"], $_POST["signupGender"]);
+    }
+
+    function login($email,$parool) {	
+        $error = "";
+        $mysqli= new mysqli("localhost","u251068829_munem","LaRudyzyne","u251068829_reded");
+        
+        $stmt = $mysqli->prepare("
+        SELECT id, email, signupPassword
+        FROM registration
+        WHERE email = ?");
+        
+        echo $mysqli->error;
+        
+        $stmt->bind_param("s", $email);
+        $stmt->bind_result($id, $emailFromDb, $paroolFromDb);
+        $stmt->execute();
+        
+        if($stmt->fetch()) {
+            $hash = hash("sha512", $parool);
+        
+        if ($hash == $paroolFromDb) {
+            $_SESSION["userId"] = $id;
+            $_SESSION["userKasutaja"] = $emailFromDb;
+            header("Location: public/homepage.php");
+                } else {
+                $error = "Wrong password";}	
+                } else {
+                $error = "No user found with this ".$email." email.";}
+            return $error;
     }
 
 ?>
