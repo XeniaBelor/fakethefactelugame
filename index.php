@@ -15,16 +15,27 @@
     <div class="page">
         <!--Menu-->
         <div class="flex-container-menu">
-            <div><button class="button button1">Home</button></div>
-            <div><button class="button button1">Team</button></div>
-            <div><button class="button button1">About</button></div>
-            <div><button class="button button1">Rules</button></div>
-            <div><button class="button button2">Start Game</button></div>
+            <div><a href="#Home" class="button button1">Home</a></div>
+            <div><a href="#Team" class="button button1">Team</a></div>
+            <div><a href="#About" class="button button1">About</a></div>
+            <div><a href="#Rules" class="button button1">Rules</a></div>
+            <div><a href="public/loginpage.php" class="button button2">Start Game</a></div>
+        </div>
+
+        <div class="page-content" id="Home">
+            <h1>Home</h1>
+        </div>
+        <div class="page-content2" id="Team">
+            <h1>Team</h1>
+        </div>
+        <div class="page-content" id="About">
+            <h1>About</h1>
+        </div>
+        <div class="page-content2" id="Rules">
+            <h1>Rules</h1>
         </div>
 
     </div>
-
- <a href="public/loginpage.php">blabla</a>
 
 </body>
 </html>
