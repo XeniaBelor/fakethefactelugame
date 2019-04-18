@@ -1,6 +1,6 @@
 <?php
 
-$mysqli= new mysqli("localhost","u251068829_munem","LaRudyzyne","u251068829_reded");
+$mysqli= new mysqli("localhost","u251068829_azabu","aPyPapuNuG","u251068829_ybaja");
 if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
@@ -12,7 +12,7 @@ $regemail = $signupAge = $signupGender = $parool = $email = "";
 //REGISTRATION
 function registration($regemail, $signupName, $signupPassword, $signupAge, $signupGender) {
 			
-    $mysqli= new mysqli("localhost","u251068829_munem","LaRudyzyne","u251068829_reded");
+    $mysqli= new mysqli("localhost","u251068829_azabu","aPyPapuNuG","u251068829_ybaja");
     
     $stmt = $mysqli->prepare("INSERT INTO registration(email, signupName, signupPassword, signupAge, signupGender) VALUE (?, ?, ?, ?, ?)");
     echo $mysqli->error;
@@ -36,7 +36,7 @@ if (isset ($_POST["regemail"])) {
 }
 
 if (isset ($_POST["signupName"])) {
-    $db= mysqli_connect("localhost","u251068829_munem","LaRudyzyne","u251068829_reded");
+    $db= mysqli_connect("localhost","u251068829_azabu","aPyPapuNuG","u251068829_ybaja");
     $signupName = $_POST['signupName'];
     $sql_u = "SELECT * FROM registration WHERE signupName = '$signupName'";
     $res_u = mysqli_query($db,$sql_u) or die (mysqli_error($db));
@@ -91,34 +91,36 @@ if(isset ($_POST["signupPassword"])) {
     $signupPassword = hash("sha512", $_POST["signupPassword"]);
     registration($regemail, $signupName, $signupPassword, $_POST["signupAge"], $_POST["signupGender"]);
     }
+    
+//LOGIN function
+function login($email,$parool) {	
+    $error = "";
+    $mysqli= new mysqli("localhost","u251068829_azabu","aPyPapuNuG","u251068829_ybaja");
+    
+    $stmt = $mysqli->prepare("
+    SELECT id, email, signupPassword
+    FROM registration
+    WHERE email = ?");
+    
+    echo $mysqli->error;
+    
+    $stmt->bind_param("s", $email);
+    $stmt->bind_result($id, $emailFromDb, $paroolFromDb);
+    $stmt->execute();
+    
+    if($stmt->fetch()) {
+        $hash = hash("sha512", $parool);
+    
+    if ($hash == $paroolFromDb) {
+        $_SESSION["userId"] = $id;
+        $_SESSION["userKasutaja"] = $emailFromDb;
+        header("Location: homepage.php");
+            } else {
+            $error = "Wrong password";}	
+            } else {
+            $error = "No user found with this ".$email." email.";}
+        return $error;
+}
 
-    function login($email,$parool) {	
-        $error = "";
-        $mysqli= new mysqli("localhost","u251068829_munem","LaRudyzyne","u251068829_reded");
-        
-        $stmt = $mysqli->prepare("
-        SELECT id, email, signupPassword
-        FROM registration
-        WHERE email = ?");
-        
-        echo $mysqli->error;
-        
-        $stmt->bind_param("s", $email);
-        $stmt->bind_result($id, $emailFromDb, $paroolFromDb);
-        $stmt->execute();
-        
-        if($stmt->fetch()) {
-            $hash = hash("sha512", $parool);
-        
-        if ($hash == $paroolFromDb) {
-            $_SESSION["userId"] = $id;
-            $_SESSION["userKasutaja"] = $emailFromDb;
-            header("Location: public/homepage.php");
-                } else {
-                $error = "Wrong password";}	
-                } else {
-                $error = "No user found with this ".$email." email.";}
-            return $error;
-    }
 
 ?>
